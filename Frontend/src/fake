@@ -1,0 +1,94 @@
+/* eslint-disable no-unused-vars */
+import React, { useContext, useEffect, useState } from "react";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import Navbar from "./components/Navbar";
+import NewProduct from "./components/NewProduct";
+import Remove from "./components/Remove";
+import Products from "./components/Products";
+import Search from "./components/Search";
+import About from "./Pages/About";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import TermsOfService from "./Pages/TermsofService";
+import ContactUs from "./Pages/ContactUs";
+import UpdateProduct from "./components/updateProduct";
+import Header from "./components/Header";
+import Login from "./components/Auth/Login";
+import { getLocalStorage, setLocalStorage } from "./utils/Localstorage";
+import { AuthContext } from "./Context/AuthProvider";
+
+const App = () => {
+  const [user, setUser] = useState("");
+
+  const authData = useContext(AuthContext);
+ 
+  const handleLogin = (email, password) => {
+    if (authData && authData.shopkeepers.find((e)=>email == e.email && password == e.password)) {
+      setUser("shopkeepers");
+      setLocalStorage("shopkeepers", "shopkeepers"); // Optional: persist login
+      return true;
+    } else {
+      alert("Invalid credentials");
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const savedShopkeeper = getLocalStorage("shopkeeper");
+    if (savedShopkeeper) {
+      setUser(savedShopkeeper);
+    }
+  }, []);
+
+  return (
+    <>
+      <Header />
+      {user && <Navbar />}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+
+        {/* 🔒 Login route */}
+        <Route
+          path="/login"
+          element={
+            user ? (
+              <Navigate to="/" replace />
+            ) : (
+              <Login handleLogin={handleLogin} />
+            )
+          }
+        />
+
+        {/* 🔒 Protected routes */}
+        <Route
+          path="/NewProduct"
+          element={user ? <NewProduct /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/Remove/:id"
+          element={user ? <Remove /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/Products"
+          element={user ? <Products /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/Search"
+          element={user ? <Search /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/update/:productId"
+          element={user ? <UpdateProduct /> : <Navigate to="/login" replace />}
+        />
+
+        {/* Public pages */}
+        <Route path="/About" element={<About />} />
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/TermsOfService" element={<TermsOfService />} />
+        <Route path="/ContactUs" element={<ContactUs />} />
+      </Routes>
+    </>
+  );
+};
+
+export default App;
