@@ -16,6 +16,7 @@ import { AuthContext } from "./Context/AuthProvider";
 import Login from "./components/Auth/Login";
 import { setLocalStorage } from "./utils/Localstorage";
 import ShopkeeperDashboard from "./components/Dashboard/ShopkeeperDashboard";
+import Signup from "./components/Auth/Signup";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -23,11 +24,6 @@ const App = () => {
   const authData = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Set shopkeepers in localStorage once
-  useEffect(() => {
-    setLocalStorage()
-  }, []);
 
   useEffect(() => {
     if (user && location.pathname === "/Login") {
@@ -50,6 +46,24 @@ const App = () => {
     }
   };
 
+ const handleSignup = (newUser) => {
+  const existingData = JSON.parse(localStorage.getItem("shopkeepers")) || [];
+
+  const userExists = existingData.some(user => user.email === newUser.email);
+
+  if (userExists) {
+    alert("User with this email already exists.");
+    return;
+  }
+
+  existingData.push(newUser);
+  localStorage.setItem("shopkeepers", JSON.stringify(existingData));
+
+  alert("Signup successful!");
+  navigate("/login"); // or auto-login if desired
+};
+
+
   useEffect(() => {
     const loggedIn = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedIn?.role === "shopkeeper") {
@@ -67,6 +81,10 @@ const App = () => {
         <Route
           path="/Login"
           element={!user ? <Login handleLogin={handleLogin} /> : " "}
+        />
+          <Route
+          path="/Signup"
+          element={!user ? <Signup handleSignup={handleSignup} /> : " "}
         />
         {user && <Route path="/ShopkeeperDashboard" element={<ShopkeeperDashboard changeUser ={setUser} data={loggedInUserData} />} />}
         {user && <Route path="/NewProduct" element={<NewProduct />} />}
