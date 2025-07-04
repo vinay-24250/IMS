@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../Context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-const Signup = ({ handleSignup }) => {
+const Signup = () => {
+  const { handleSignup } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [businessName, setBusinessName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    handleSignup({ businessName, ownerName, email, password });
+    setError("");
 
-    // Clear inputs
+    const success = await handleSignup({ businessName, ownerName, email, password });
+
+    if (success) {
+      navigate("/ShopkeeperDashboard");
+    } else {
+      setError("❌ Signup failed. Please check your details or try again.");
+    }
+
+  
     setBusinessName("");
     setOwnerName("");
     setEmail("");
@@ -23,6 +37,11 @@ const Signup = ({ handleSignup }) => {
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Create an Account
         </h2>
+
+        {error && (
+          <p className="text-red-600 font-medium text-center mb-4">{error}</p>
+        )}
+
         <form onSubmit={submitHandler} className="flex flex-col gap-4">
           <input
             value={businessName}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const UpdateProduct = () => {
@@ -19,12 +19,19 @@ const UpdateProduct = () => {
   const [messageType, setMessageType] = useState("info");
   const [loading, setLoading] = useState(false);
 
+  const token = localStorage.getItem("authToken");
+
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:8080/api/products/fetchById/${productId}`
+          `http://localhost:8080/api/products/fetchById/${productId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (res.data) {
           setProduct(res.data);
@@ -40,7 +47,7 @@ const UpdateProduct = () => {
       }
     };
     fetchProduct();
-  }, [productId]);
+  }, [productId, token]);
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -56,7 +63,10 @@ const UpdateProduct = () => {
         `http://localhost:8080/api/products/update/${productId}`,
         product,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Include auth token
+          },
         }
       );
       setMessage("✅ Product updated successfully!");
@@ -76,7 +86,7 @@ const UpdateProduct = () => {
     "w-full px-3 py-2 rounded-md border border-gray-300 bg-neutral-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500";
 
   return (
-    <div className="bg-gradient-to-r from-teal-100 via-teal-300 to-teal-400 min-h-screen flex justify-center pt-5 ">
+    <div className="bg-gradient-to-r from-teal-100 via-teal-300 to-teal-400 min-h-screen flex justify-center pt-5">
       <div className="bg-white rounded-2xl shadow-xl h-full w-full max-w-xl p-4 mt-7 font-sans border border-gray-200">
         <h2 className="text-3xl font-bold text-center text-teal-800 mb-6">
           Update Product
@@ -101,21 +111,26 @@ const UpdateProduct = () => {
             { name: "rating", label: "Rating", type: "number", min: 1, max: 5 },
             { name: "category", label: "Category" },
             { name: "quantity", label: "Quantity", type: "number" },
-            { name: "supplierContact", label: "SupplierContact", type: "number" ,min: 10 , maxl: 10 },
-          ].map(({ name, label, type = "text", min, max }) => (
+            {
+              name: "supplierContact",
+              label: "Supplier Contact",
+              type: "tel",
+              minLength: 10,
+              maxLength: 10,
+              pattern: "[0-9]{10}",
+            },
+          ].map(({ name, label, ...rest }) => (
             <div key={name}>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {label}
               </label>
               <input
-                type={type}
                 name={name}
                 value={product[name]}
                 onChange={handleChange}
-                min={min}
-                max={max}
                 required
                 className={inputClass}
+                {...rest}
               />
             </div>
           ))}
@@ -127,7 +142,6 @@ const UpdateProduct = () => {
           >
             {loading ? "Updating..." : "Update Product"}
           </button>
-
         </form>
       </div>
     </div>

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AuthContext } from "../Context/AuthProvider";
 
 const NewProduct = () => {
-  const [productId, setProductId] = useState("");
+
   const [productName, setProductName] = useState("");
   const [rating, setRating] = useState(0);
   const [price, setPrice] = useState("");
@@ -15,12 +16,12 @@ const NewProduct = () => {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const {authToken} = useContext(AuthContext)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
-      !productId ||
+      
       !productName ||
       !rating ||
       !price ||
@@ -34,7 +35,6 @@ const NewProduct = () => {
     }
 
     const newProduct = {
-      productId,
       productName,
       rating,
       price,
@@ -52,6 +52,7 @@ const NewProduct = () => {
         newProduct,
         {
           headers: {
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
           },
         }
@@ -60,8 +61,6 @@ const NewProduct = () => {
       setMessage("✅ Product added successfully!");
       setMessageType("success");
 
-      // Clear fields on success
-      setProductId("");
       setProductName("");
       setRating(0);
       setPrice("");
@@ -96,13 +95,7 @@ const NewProduct = () => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10 px-5 mt-5 mb-2"
         >
-          <input
-            className="w-full h-12 px-5 rounded-lg text-lg text-gray-700 placeholder-gray-500 border border-teal-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-600 transition"
-            type="text"
-            placeholder="Enter Product Id (Numeric)"
-            value={productId}
-            onChange={(e) => setProductId(e.target.value)}
-          />
+        
           <input
             className="w-full h-12 px-5 rounded-lg text-lg text-gray-700 placeholder-gray-500 border border-teal-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-600 transition"
             type="text"
@@ -145,7 +138,7 @@ const NewProduct = () => {
             onChange={(e) => setQuantity(e.target.value)}
           />
           <input
-            className="w-full h-12 px-5 rounded-lg text-lg mx-[225px] text-gray-700 placeholder-gray-500 border border-teal-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-600 transition"
+            className="w-full h-12 px-5 rounded-lg text-lg text-gray-700 placeholder-gray-500 border border-teal-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-600 transition"
             type="tel"
             maxLength="10"
             pattern="\d{10}"

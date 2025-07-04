@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+
 import HomePage from "./components/HomePage";
 import Navbar from "./components/Navbar";
 import NewProduct from "./components/NewProduct";
@@ -12,86 +13,41 @@ import TermsOfService from "./Pages/TermsofService";
 import ContactUs from "./Pages/ContactUs";
 import UpdateProduct from "./components/updateProduct";
 import Header from "./components/Header";
-import { AuthContext } from "./Context/AuthProvider";
+
 import Login from "./components/Auth/Login";
-import { setLocalStorage } from "./utils/Localstorage";
-import ShopkeeperDashboard from "./components/Dashboard/ShopkeeperDashboard";
 import Signup from "./components/Auth/Signup";
+import ShopkeeperDashboard from "./components/Dashboard/ShopkeeperDashboard";
+
+import { AuthContext } from "./Context/AuthProvider";
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const [loggedInUserData, setLoggedInUserData] = useState(null);
-  const authData = useContext(AuthContext);
+  const { currentUser, login, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (user && location.pathname === "/Login") {
+    if (currentUser && location.pathname === "/login") {
       navigate("/ShopkeeperDashboard");
     }
-  }, [user, navigate, location.pathname]);
-
-  const handleLogin = (email, password) => {
-    const storedShopkeepers = JSON.parse(localStorage.getItem("shopkeepers") || "[]");
-    const shopkeeper = storedShopkeepers.find(
-      (e) => e.email === email && e.password === password
-    );
-
-    if (shopkeeper) {
-      setUser(shopkeeper.email);
-      setLoggedInUserData(shopkeeper);
-      localStorage.setItem("loggedInUser", JSON.stringify({ role: "shopkeeper" }));
-    } else {
-      alert("Invalid Credentials");
-    }
-  };
-
- const handleSignup = (newUser) => {
-  const existingData = JSON.parse(localStorage.getItem("shopkeepers")) || [];
-
-  const userExists = existingData.some(user => user.email === newUser.email);
-
-  if (userExists) {
-    alert("User with this email already exists.");
-    return;
-  }
-
-  existingData.push(newUser);
-  localStorage.setItem("shopkeepers", JSON.stringify(existingData));
-
-  alert("Signup successful!");
-  navigate("/login"); // or auto-login if desired
-};
-
-
-  useEffect(() => {
-    const loggedIn = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (loggedIn?.role === "shopkeeper") {
-      setUser("shopkeeper");
-    }
-  }, []);
+  }, [currentUser, location.pathname, navigate]);
 
   return (
     <>
       <Header />
-      {user && <Navbar />}
+      {currentUser && <Navbar logout={logout} />}
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/Login"
-          element={!user ? <Login handleLogin={handleLogin} /> : " "}
-        />
-          <Route
-          path="/Signup"
-          element={!user ? <Signup handleSignup={handleSignup} /> : " "}
-        />
-        {user && <Route path="/ShopkeeperDashboard" element={<ShopkeeperDashboard changeUser ={setUser} data={loggedInUserData} />} />}
-        {user && <Route path="/NewProduct" element={<NewProduct />} />}
-        <Route path="/Remove/:id" element={<Remove />} />
-        {user && <Route path="/Products" element={<Products data = {loggedInUserData} />} />}
+        <Route path="/login" element={!currentUser ? <Login login={login} /> : null} />
+        <Route path="/signup" element={<Signup />} />
+
+        {currentUser && <Route path="/ShopkeeperDashboard" element={<ShopkeeperDashboard />} />}
+        {currentUser && <Route path="/NewProduct" element={<NewProduct />} />}
+        {currentUser && <Route path="/Products" element={<Products />} />}
+        {currentUser && <Route path="/update/:productId" element={<UpdateProduct />} />}
+        {currentUser && <Route path="/Remove/:id" element={<Remove />} />}
+
         <Route path="/Search" element={<Search />} />
-        <Route path="/update/:productId" element={<UpdateProduct />} />
         <Route path="/About" element={<About />} />
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/TermsOfService" element={<TermsOfService />} />
