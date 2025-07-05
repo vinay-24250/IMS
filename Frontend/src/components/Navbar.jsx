@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="h-16 w-full bg-teal-800 font-[Poopins] text-white flex place-items-center justify-evenly text-2xl">
+      <div className="h-16 w-full bg-yellow-100 font-[Poopins] text-gray-600 flex place-items-center justify-evenly text-2xl">
       <div className=" flex place-items-center justify-center gap-2 ml-20"> <a className="flex justify-center place-items-center gap-3" href="/About">
           <h2 className="text-5xl font-semibold">IMS</h2>
           <img
@@ -28,7 +28,7 @@ const Navbar = () => {
           /></a>
         </div>
 
-        <div className="h-16 flex justify-center items-center font-['Poopins'] bg-teal-800 ml-40 gap-16 w-[1000px]">
+        <div className="h-16 flex justify-center items-center font-['Poopins'] ml-40 gap-16 w-[900pxpx]">
 
           <Link className="text-lg hover:underline " to="/">
             Home <FontAwesomeIcon className="text-md" icon={faHouseChimney} />
@@ -44,7 +44,7 @@ const Navbar = () => {
           <Link className="text-lg hover:underline" to="/NewProduct">
             Add Product <FontAwesomeIcon icon={faPlus} />
           </Link>
-          <Link className="text-lg hover:underline" to="/Remove/:">
+          <Link className="text-lg hover:underline" to="/Remove">
             Remove Product{" "}
             <FontAwesomeIcon className="text-md" icon={faTrash} />
           </Link>

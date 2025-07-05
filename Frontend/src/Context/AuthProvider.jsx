@@ -17,22 +17,32 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Fetch user data using token
   const fetchUserData = async (token) => {
-    try {
-      const res = await axios.get("http://localhost:8080/api/products/my-products", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  try {
+    const [userRes, productRes] = await Promise.all([
+      axios.get("http://localhost:8080/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+      axios.get("http://localhost:8080/api/products/my-products", {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    ]);
 
-      const email = parseJwt(token)?.sub;
-      setCurrentUser({ email, products: res.data });
-    } catch (error) {
-      console.error("Token invalid or expired:", error);
-      logout(); // Remove invalid token
-    }
-  };
+    const userData = userRes.data;
+    const products = productRes.data;
+console.log(userData)
+    setCurrentUser({
+      email: userData.email,
+      ownerName: userData.ownerName,
+      businessName: userData.businessName,
+      products,
+    });
+  } catch (error) {
+    setMessage("Token expired")
+    console.error("Token invalid or expired:", error);
+    logout();
+  }
+};
 
   // Login handler
   const login = async (email, password) => {

@@ -105,20 +105,15 @@ const Products = () => {
   if (loading) return <p className="text-center mt-10 text-teal-600">Loading products...</p>;
 
   return (
-    <div className="bg-gradient-to-tr from-teal-100 via-teal-200 to-teal-300 min-h-screen p-6">
-      <h2 className="text-3xl font-bold text-center text-teal-800 mb-4">
-        Welcome to your Inventory {currentUser?.email}
-      </h2>
-      <h2 className="text-3xl font-bold text-center text-teal-800 mb-6">
-        📦 Product Inventory
-      </h2>
-
+    <div className="bg-gray-800 gap-5 min-h-screen flex flex-col place-items-center ">
+      
+    
       {message && <div className="text-center text-red-600 mb-4">{message}</div>}
 
     
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
-        <div className="w-64 bg-white/60 border border-teal-300 shadow-lg rounded-xl px-6 py-4 flex items-center gap-4">
-          <label className="text-teal-800 font-semibold text-sm">
+        <div className="w-64 h-20 bg-white/60 border border-yellow-300 shadow-lg rounded-xl mt-20 px-6 py-4 flex items-center justify-center gap-4">
+          <label className=" font-semibold text-sm">
             Stock Alert Limit:
           </label>
           <input
@@ -129,13 +124,16 @@ const Products = () => {
             className="w-20 px-2 py-1 border border-teal-300 rounded-md"
           />
         </div>
+   <div className="w-40 h-20 mt-20">
 
-        <button
+      <button
           onClick={() => setShowLowStockOnly(!showLowStockOnly)}
-          className="w-64 bg-white/60 border border-teal-300 shadow-lg rounded-xl py-3 text-teal-800 font-medium hover:bg-teal-100"
+          className="w-64 h-20 bg-white/60 border border-yellow-300 hover:bg-yellow-200 shadow-lg rounded-xl py-3  font-medium"
         >
           {showLowStockOnly ? "🔁 Show All Products" : "⚠️ View Low Stock Only"}
         </button>
+   </div>
+      
       </div>
 
 
@@ -176,7 +174,7 @@ const Products = () => {
                   <td className="px-3 py-2">
                     <button
                       onClick={() => navigate(`/update/${product.productId}`)}
-                      className="bg-yellow-200 text-teal-800 text-xs px-4 py-1 rounded-md hover:bg-teal-600 hover:text-white transition"
+                      className="bg-yellow-200 text-teal-800 text-xs px-4 py-1 rounded-md hover:bg-yellow-400 transition"
                     >
                       Update
                     </button>
@@ -194,10 +192,10 @@ const Products = () => {
         </table>
       </div>
 
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-10 w-40 place-items-center">
         <button
           onClick={generateReport}
-          className="bg-teal-700 w-44 px-6 py-2 text-white text-sm font-semibold rounded-xl shadow-lg hover:bg-teal-800"
+          className="bg-yellow-200 w-44 px-6 py-2 text-sm font-semibold rounded-xl shadow-lg hover:bg-yellow-400 "
         >
           📄 {showLowStockOnly ? "Low Stock Report" : "Stock Report"}
         </button>

@@ -1,12 +1,13 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../Context/AuthProvider";
 
 const Remove = () => {
   const [productId, setProductId] = useState("");
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
+  const {authToken} = useContext(AuthContext)
   const fetchProduct = async () => {
     if (!productId) {
       setMessage("Please enter a Product ID.");
@@ -18,7 +19,13 @@ const Remove = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/products/fetchById/${productId}`
+        `http://localhost:8080/api/products/fetchById/${productId}` ,
+         {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       if (!response.data) {
         setMessage("This Product ID does not exist. Please check and try again!");
@@ -54,9 +61,13 @@ const Remove = () => {
     setLoading(true);
     try {
       await axios.delete(`http://localhost:8080/api/products/${productId}`, {
-        headers: { "Content-Type": "application/json" },
+        headers: 
+        { 
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json" },
       });
       setProductId("");
+      setMessage("Product deleted successfully")
       setProduct(null)
     } catch (error) {
       setMessage("Error deleting product. Try again.");
@@ -69,9 +80,9 @@ const Remove = () => {
 
   return (
     <>
-    <div className="min-h-screen bg-gradient-to-br from-teal-200 via-teal-300 to-teal-400 flex flex-col items-center justify-start py-16 px-4 font-serif">
-      <div className="bg-white bg-opacity-70 backdrop-blur-md p-8 rounded-2xl shadow-2xl max-w-xl w-full text-center">
-      <h2 className="text-3xl font-bold text-teal-900 mb-6 tracking-wide">
+    <div className="min-h-screen bg-gray-800 flex flex-col items-center justify-start py-16 px-4 font-serif">
+      <div className="bg-gray-500 bg-opacity-70 backdrop-blur-md p-8 rounded-2xl shadow-2xl max-w-xl w-full text-center">
+      <h2 className="text-3xl font-bold text-white mb-6 tracking-wide">
           Remove Product
         </h2>
         <input
@@ -79,15 +90,15 @@ const Remove = () => {
           placeholder="Enter Product ID"
           value={productId}
           onChange={(e) => setProductId(e.target.value)}
-          className="w-full h-12 px-5 rounded-lg text-lg text-gray-700 placeholder-gray-500 border border-teal-400 shadow-inner focus:outline-none focus:ring-2 focus:ring-teal-600 transition"
+          className="w-full h-12 px-5 rounded-lg text-lg text-gray-700 placeholder-gray-500 border border-yellow-300 shadow-inner focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
         />
 <div className="gap-3 flex justify-center">
         <button
           onClick={fetchProduct}
-          className={`w-60 mt-6 h-12 rounded-lg text-lg font-semibold text-white ${
+          className={`w-60 mt-6 h-12 rounded-lg text-lg font-semibold text-black ${
             loading
               ? "bg-gray-400 w-60 cursor-not-allowed"
-              : "bg-teal-700 w-60 hover:bg-teal-800 hover:scale-105 transition"
+              : "bg-yellow-200 w-60 hover:bg-yellow-400 hover:scale-105 transition"
           }`}
         >
           {loading ? "Searching..." : "Fetch Product"}
@@ -98,9 +109,9 @@ const Remove = () => {
             disabled={!product || loading ||product.productId!=productId}
             className={`${
               product
-                ? "bg-teal-700 w-60 hover:bg-teal-800 hover:scale-105 transition"
+                ? "bg-yellow-200 w-60 hover:bg-yellow-400 hover:scale-105 transition"
                 : "bg-gray-400 w-60 cursor-not-allowed"
-            } w-60 mt-6 h-12 rounded-lg text-lg font-semibold text-white`}
+            } w-60 mt-6 h-12 rounded-lg text-lg font-semibold`}
           >
             {loading ? "Deleting..." : "Remove Product"}
           </button>
@@ -108,38 +119,32 @@ const Remove = () => {
       </div>
 
       {product && (
-        <table className="w-[800px] mt-16 border-black">
-          <tr className="h-10 bg-gray-400">
-            <th className="font-sans text-start px-4 border-x-4">Product ID</th>
-            <th className="font-sans text-start px-4 border-x-4">
-              Product Name
-            </th>
-            <th className="font-sans text-start px-4 border-x-4">Price</th>
-            <th className="font-sans text-start px-4 border-x-4">Rating</th>
-            <th className="font-sans text-start px-4 border-x-4">Quantity</th>
-            <th className="font-sans text-start px-4 border-x-4">Category</th>
-          </tr>
-          <tr className="h-10">
-            <td className="font-sans text-start px-4 border-x-4 bg-white">
-              {product.productId}
-            </td>
-            <td className="font-sans text-start px-4 border-x-4 bg-white">
-              {product.productName}
-            </td>
-            <td className="font-sans text-start px-4 border-x-4 bg-white">
-              {product.price}
-            </td>
-            <td className="font-sans text-start px-4 border-x-4 bg-white">
-              {product.rating}
-            </td>
-            <td className="font-sans text-start px-4 border-x-4 bg-white">
-              {product.quantity}
-            </td>
-            <td className="font-sans text-start px-4 border-x-4 bg-white">
-              {product.category}
-            </td>
-          </tr>
-        </table>
+        <div className="w-full max-w-5xl mt-10 bg-white bg-opacity-80 rounded-xl shadow-xl overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-yellow-200  text-md">
+                <th className="px-6 py-3">Product ID</th>
+                <th className="px-6 py-3">Product Name</th>
+                <th className="px-6 py-3">Price</th>
+                <th className="px-6 py-3">Rating</th>
+                <th className="px-6 py-3">Quantity</th>
+                <th className="px-6 py-3">Category</th>
+                <th className="px-6 py-3">Supplier Contact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="bg-white hover:bg-teal-50 border-t">
+                <td className="px-6 py-4">{product.productId}</td>
+                <td className="px-6 py-4">{product.productName}</td>
+                <td className="px-6 py-4">{product.price}</td>
+                <td className="px-6 py-4">{product.rating}</td>
+                <td className="px-6 py-4">{product.quantity}</td>
+                <td className="px-6 py-4">{product.category}</td>
+                <td className="px-6 py-4">{product.supplierContact}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       )}
   
       {message && (

@@ -83,10 +83,10 @@ const NewProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-200 via-teal-300 to-teal-400 flex flex-col items-center justify-start py-16 px-4 font-serif">
-      <div className="bg-white bg-opacity-70 backdrop-blur-md p-8 rounded-2xl shadow-2xl max-w-[1000px] w-full text-center h-[590px]">
+    <div className="min-h-screen bg-gray-800 flex flex-col items-center justify-start py-16 px-4 font-serif">
+      <div className="bg-gray-500  p-8 rounded-3xl shadow-2xl max-w-[1000px] w-full text-center h-[530px] py-10">
         <div className="h-16 w-auto flex justify-center items-center py-10">
-          <h2 className="text-3xl font-bold text-teal-900 mb-6 tracking-wide">
+          <h2 className="text-3xl font-bold text-yellow-200 mb-6 tracking-wide">
             📦 Add Product 📦
           </h2>
         </div>
@@ -153,7 +153,7 @@ const NewProduct = () => {
             type="submit"
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-teal-800 max-w-60 text-white font-semibold font-serif text-md h-10 flex justify-center place-items-center transition delay-150 duration-300 ease-in-out my-11 rounded-lg hover:-translate-y-1 hover:scale-110 hover:bg-teal-900 hover:text-white"
+            className="bg-yellow-200 max-w-40 font-semibold font-serif text-md h-10 flex justify-center place-items-center transition delay-150 duration-300 ease-in-out my-11 rounded-lg hover:-translate-y-1 hover:scale-110 hover:bg-yellow-400"
           >
             {loading ? "Adding Product..." : "ADD PRODUCT"}
           </button>

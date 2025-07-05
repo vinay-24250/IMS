@@ -11,7 +11,7 @@ const HomePage = ({data}) => {
   return (
     <>
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-teal-200 via-teal-300 to-teal-400 h-[550px] flex flex-col justify-center items-center text-center px-5">
+      <div className="bg-gray-800 h-auto flex flex-col justify-center items-center text-center px-5">
         
         <div className="flex flex-col md:flex-row justify-center items-center py-20 gap-10">
           <motion.div
@@ -21,15 +21,15 @@ const HomePage = ({data}) => {
             transition={{ duration: 0.8 }}
           >
             
-            <h2 className="font-['Poppins'] font-extrabold text-4xl sm:text-5xl md:text-6xl text-teal-900 hover:scale-105 transition duration-500">
+            <h2 className="font-['Poppins'] font-extrabold text-4xl sm:text-5xl md:text-6xl text-yellow-200 hover:scale-105 transition duration-500">
               Smarter Inventory, Faster Decisions
             </h2>
-            <h2 className="font-['Poppins'] mb-10 font-extrabold text-3xl sm:text-4xl md:text-5xl text-black mt-3 hover:scale-105 transition duration-500">
+            <h2 className="font-['Poppins'] mb-10 font-extrabold text-3xl sm:text-4xl md:text-5xl text-slate-300 mt-3 hover:scale-105 transition duration-500">
               Your All-in-One Solution for Effortless Management
             </h2>
             <motion.a
               href="/Login"
-              className="px-6 py-3 text-lg font-semibold text-white bg-teal-800 rounded-lg shadow-md hover:bg-teal-950 transition-all duration-300 hover:scale-105"
+              className="px-6 py-3 text-lg font-semibold bg-yellow-200 rounded-lg shadow-md hover:bg-yellow-400 transition-all duration-300 hover:scale-105"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -46,9 +46,8 @@ const HomePage = ({data}) => {
             transition={{ duration: 0.8 }}
           />
         </div>
+           <HomeCards />
       </div>
-      <HomeCards />
-      <Footer />
     </>
   );
 };

@@ -39,7 +39,7 @@ const HomeCards = () => {
   };
 
   return (
-    <div className="bg-teal-800 w-full h-[500px] flex-col justify-center place-items-center pt-20 px-20">
+    <div className="bg-gray-500 h-[500px] rounded-3xl flex-col justify-center place-items-center py-16 px-20 mb-10">
       <h2 className="font-['Poppins'] font-extrabold text-2xl sm:text-5xl md:text-4xl text-white hover:scale-105 transition duration-500 mb-20">
         Explore Key Features
       </h2>

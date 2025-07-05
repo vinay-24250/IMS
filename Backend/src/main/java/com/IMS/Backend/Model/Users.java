@@ -27,7 +27,11 @@ public class Users {
     @Column(nullable = false ,unique = true)
     private String password;
 
+    @Column(nullable = false ,unique = true)
+   private String businessName;
 
+    @Column(nullable = false ,unique = true)
+   private String ownerName;
 
     public Long getId() {
         return id;

@@ -11,7 +11,7 @@ import About from "./Pages/About";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import TermsOfService from "./Pages/TermsofService";
 import ContactUs from "./Pages/ContactUs";
-import UpdateProduct from "./components/updateProduct";
+import UpdateProduct from "./components/UpdateProduct";
 import Header from "./components/Header";
 
 import Login from "./components/Auth/Login";
@@ -19,6 +19,7 @@ import Signup from "./components/Auth/Signup";
 import ShopkeeperDashboard from "./components/Dashboard/ShopkeeperDashboard";
 
 import { AuthContext } from "./Context/AuthProvider";
+import Footer from "./components/Footer";
 
 const App = () => {
   const { currentUser, login, logout } = useContext(AuthContext);
@@ -45,7 +46,7 @@ const App = () => {
         {currentUser && <Route path="/NewProduct" element={<NewProduct />} />}
         {currentUser && <Route path="/Products" element={<Products />} />}
         {currentUser && <Route path="/update/:productId" element={<UpdateProduct />} />}
-        {currentUser && <Route path="/Remove/:id" element={<Remove />} />}
+        {currentUser && <Route path="/Remove" element={<Remove />} />}
 
         <Route path="/Search" element={<Search />} />
         <Route path="/About" element={<About />} />
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/TermsOfService" element={<TermsOfService />} />
         <Route path="/ContactUs" element={<ContactUs />} />
       </Routes>
+      <Footer />
     </>
   );
 };
