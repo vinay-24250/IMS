@@ -70,8 +70,7 @@ console.log(userData)
       return false;
     }
   };
-
- const handleSignup = async ({ businessName, ownerName, email, password }, setMessage) => {
+const handleSignup = async ({ businessName, ownerName, email, password }, setMessage) => {
   try {
     const response = await axios.post("http://localhost:8080/register", {
       businessName,
@@ -80,24 +79,21 @@ console.log(userData)
       password,
     });
 
-    const { token, user } = response.data;
-
-    // Save token to localStorage
-    localStorage.setItem("authToken", token);
-    setAuthToken(token);
-    setCurrentUser(user);
-
-    // Optionally navigate to dashboard
-    setMessage("✅ Registration successful!");
-    navigate("/ShopkeeperDashboard");
-
+    if (response.status === 200 || response.status === 201) {
+      setMessage("✅ Registration successful! Please login.");
+      return true;
+    } else {
+      setMessage("⚠️ Something went wrong. Try again.");
+      return false;
+    }
   } catch (error) {
     console.error("Signup failed:", error);
     if (error.response?.status === 409) {
       setMessage("❌ Email already exists.");
     } else {
-      setMessage("❌ Signup failed. Try again.");
+      setMessage("❌ Signup failed. Please try again.");
     }
+    return false; 
   }
 };
 

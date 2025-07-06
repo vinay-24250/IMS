@@ -11,16 +11,18 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+const [message, setMessage] = useState('')
   const submitHandler = async (e) => {
     e.preventDefault();
     setError("");
 
-    const success = await handleSignup({ businessName, ownerName, email, password });
+    const success = await handleSignup({ businessName, ownerName, email, password } ,setMessage);
 
     if (success) {
-      navigate("/ShopkeeperDashboard");
+      console.log("sucess")
+      navigate("/Login");
     } else {
+      console.log(error)
       setError("❌ Signup failed. Please check your details or try again.");
     }
 
@@ -88,6 +90,7 @@ const Signup = () => {
             Login
           </a>
         </p>
+        {message}
       </div>
     </div>
   );
