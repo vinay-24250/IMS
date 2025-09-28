@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
       axios.get("http://localhost:8080/api/products/my-products", {
         headers: { Authorization: `Bearer ${token}` },
       }),
-    ]);
+    ])
 
     const userData = userRes.data;
     const products = productRes.data;
@@ -38,6 +38,7 @@ console.log(userData)
       products,
     });
   } catch (error) {
+
     setMessage("Token expired")
     console.error("Token invalid or expired:", error);
     logout();
@@ -70,6 +71,7 @@ console.log(userData)
       return false;
     }
   };
+  
 const handleSignup = async ({ businessName, ownerName, email, password }, setMessage) => {
   try {
     const response = await axios.post("http://localhost:8080/register", {
@@ -97,14 +99,13 @@ const handleSignup = async ({ businessName, ownerName, email, password }, setMes
   }
 };
 
-  // Logout handler
   const logout = () => {
     localStorage.removeItem("authToken");
     setAuthToken(null);
     setCurrentUser(null);
   };
 
-  // Run on mount and whenever token changes
+  
   useEffect(() => {
     if (authToken) {
       fetchUserData(authToken);

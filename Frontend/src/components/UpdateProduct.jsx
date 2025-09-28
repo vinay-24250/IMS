@@ -65,7 +65,7 @@ const UpdateProduct = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ Include auth token
+            Authorization: `Bearer ${token}`, 
           },
         }
       );

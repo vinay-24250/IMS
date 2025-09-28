@@ -19,13 +19,11 @@ public class JWTService {
     // 256-bit secret key (Base64 encoded). Replace with your secure key.
     private static final String SECRET_KEY = "vW5wr3FB1g8hA1YqPBdEhwDJ6Km5xZBzxHNNfAGKXJ0=";
 
-    // ✅ Generate JWT token
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, email);
     }
 
-    // ✅ Create token with subject and claims
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .claims()
@@ -38,12 +36,10 @@ public class JWTService {
                 .compact();
     }
 
-    // ✅ Extract email (subject) from JWT
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // ✅ Validate JWT
     public boolean validateToken(String token, UserDetails userDetails) {
         final String email = extractEmail(token);
         return email.equals(userDetails.getUsername()) && !isTokenExpired(token);

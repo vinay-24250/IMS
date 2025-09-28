@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const { handleSignup } = useContext(AuthContext);
@@ -86,9 +86,9 @@ const [message, setMessage] = useState('')
         </form>
         <p className="text-sm text-gray-500 text-center mt-6">
           Already have an account?{" "}
-          <a href="/login" className="text-yellow-800 font-medium hover:underline">
+          <Link to="/login" className="text-yellow-800 font-medium hover:underline">
             Login
-          </a>
+          </Link>
         </p>
         {message}
       </div>
