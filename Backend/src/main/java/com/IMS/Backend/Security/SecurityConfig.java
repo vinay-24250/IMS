@@ -14,10 +14,10 @@ public class SecurityConfig {
             .csrf().disable() // Disable CSRF for APIs (required for Postman/React)
             .authorizeHttpRequests()
             .requestMatchers(
+                "/",
                 "/api/products/**", // allow access to your product endpoints
                 "/api/auth/**",     // allow auth/signup/login if added
-                "/csrf-token", 
-                "/"
+                "/csrf-token"
             ).permitAll()
             .anyRequest().authenticated(); // any other request needs auth
 
